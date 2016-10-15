@@ -17,7 +17,19 @@ let instruction_3XKK opcode = let X = int (opcode &&& 0x0F00us >>> 8) in //garde
 let instruction_4XKK opcode = let X = int (opcode &&& 0x0F00us >>> 8) in //garde seulement la première valeur
                               let KK = byte (opcode &&& 0x0F00us) in
                               if chip8.Vx.[X] <> KK then chip8.PC <- chip8.PC + 4us else chip8.PC <- chip8.PC + 2us
+
+//6XKK Affecter KK à VX
+let instruction_6XKK opcode = let X = int (opcode &&& 0x0F00us >>> 8) in //garde seulement la première valeur
+                              let KK = byte (opcode &&& 0x0F00us) in
+                              chip8.Vx.[X] <- KK
+                              chip8.PC <- chip8.PC + 2us
                               
+//7XKK Ajoute KK à VX
+let instruction_7XKK opcode = let X = int (opcode &&& 0x0F00us >>> 8) in //garde seulement la première valeur
+                              let KK = byte (opcode &&& 0x0F00us) in    
+                              chip8.Vx.[X] <- chip8.Vx.[X] + KK 
+                              chip8.PC <- chip8.PC + 2us
+
 // ANNN - Affecter NNN à I
 let instruction_ANNN opcode = chip8.I <- ( opcode &&& 0x0FFFus) // garde seulement les 3 dernières valeurs pour les assigner
                               chip8.PC <- chip8.PC + 2us
