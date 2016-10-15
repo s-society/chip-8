@@ -23,6 +23,7 @@ let instruction_6XKK opcode = let X = int (opcode &&& 0x0F00us >>> 8) in //garde
                               let KK = byte (opcode &&& 0x0F00us) in
                               chip8.Vx.[X] <- KK
                               chip8.PC <- chip8.PC + 2us
+                              
 //7XKK Ajoute KK à VX
 let instruction_7XKK opcode = let X = int (opcode &&& 0x0F00us >>> 8) in //garde seulement la première valeur
                               let KK = byte (opcode &&& 0x0F00us) in    
