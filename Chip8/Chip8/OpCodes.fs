@@ -1,30 +1,30 @@
 ﻿module OpCodes
 
-//35 opcodes
+// 35 opcodes
 
-//Instruction pour effacer l'écran
+// 00E0 - Instruction pour effacer l'écran
 let  instruction_00E0 = let mutable i = 0 in while i < chip8.screen.Length do
                                                 chip8.screen.[i] <- 0uy
                                                 i <- i + 1 ;
-                        chip8.PC <- chip8.PC + 2us
-                        
-//3XKK - Passe à l'instruction suivante si VX = KK
+                        chip8.PC <- chip8.PC + 2us           
+                                     
+// 3XKK - Passe à l'instruction suivante si VX = KK
 let instruction_3XKK opcode = let X = int (opcode &&& 0x0F00us >>> 8) in //garde seulement la première valeur
                               let KK = byte (opcode &&& 0x0F00us) in
                               if chip8.Vx.[X] = KK then chip8.PC <- chip8.PC + 4us else chip8.PC <- chip8.PC + 2us
 
-//4XKK Passe à l'instruction suivante si VX != KK
+// 4XKK - Passe à l'instruction suivante si VX != KK
 let instruction_4XKK opcode = let X = int (opcode &&& 0x0F00us >>> 8) in //garde seulement la première valeur
                               let KK = byte (opcode &&& 0x0F00us) in
                               if chip8.Vx.[X] <> KK then chip8.PC <- chip8.PC + 4us else chip8.PC <- chip8.PC + 2us
 
-//6XKK Affecter KK à VX
+// 6XKK - Affecter KK à VX
 let instruction_6XKK opcode = let X = int (opcode &&& 0x0F00us >>> 8) in //garde seulement la première valeur
                               let KK = byte (opcode &&& 0x0F00us) in
                               chip8.Vx.[X] <- KK
                               chip8.PC <- chip8.PC + 2us
                               
-//7XKK Ajoute KK à VX
+// 7XKK - Ajoute KK à VX
 let instruction_7XKK opcode = let X = int (opcode &&& 0x0F00us >>> 8) in //garde seulement la première valeur
                               let KK = byte (opcode &&& 0x0F00us) in    
                               chip8.Vx.[X] <- chip8.Vx.[X] + KK 
