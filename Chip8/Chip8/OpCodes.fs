@@ -30,6 +30,11 @@ let instruction_7XKK opcode = let X = int (opcode &&& 0x0F00us >>> 8) in //garde
                               chip8.Vx.[X] <- chip8.Vx.[X] + KK 
                               chip8.PC <- chip8.PC + 2us
 
+// 9XY0 - Passe à l'instruction suivante si VX != VY
+let instruction_9XY0 opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
+                              let Y = int ((opcode &&& 0x00F0us) >>> 4) in
+                              if chip8.Vx.[X] <> chip8.Vx.[Y] then chip8.PC <- 4us else chip8.PC <- 2us
+
 // ANNN - Affecter NNN à I
 let instruction_ANNN opcode = chip8.I <- ( opcode &&& 0x0FFFus) // garde seulement les 3 dernières valeurs pour les assigner
                               chip8.PC <- chip8.PC + 2us
