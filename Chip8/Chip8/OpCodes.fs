@@ -34,3 +34,8 @@ let instruction_7XKK opcode = let X = int (opcode &&& 0x0F00us >>> 8) in //garde
 let instruction_ANNN opcode = chip8.I <- ( opcode &&& 0x0FFFus) // garde seulement les 3 dernières valeurs pour les assigner
                               chip8.PC <- chip8.PC + 2us
 
+// FX65 - Stock les valeurs de de la mémoire à l'adresse I jusqu'à I + X dans VO jusqu'à VX
+let instruction_FX65 opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
+                              for i in [0..X] do
+                                  chip8.Vx.[i] <- chip8.memory.[int chip8.I + X]
+                              chip8.PC <- chip8.PC + 2us
