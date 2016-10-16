@@ -43,6 +43,16 @@ let instruction_ANNN opcode = chip8.I <- ( opcode &&& 0x0FFFus) // garde seuleme
 let instruction_FX1E opcode = chip8.I <- chip8.I + uint16 chip8.Vx.[int ((opcode &&& 0x0F00us) >>> 8)]
                               chip8.PC <- chip8.PC + 2us
 
+// FX33 - Stock la représentation BCD de VX aux adresses I, I + 1, I + 2
+let instruction_FX33 opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in // number of Vx register
+                              let B = chip8.Vx.[X] / 100uy in
+                              let C = (chip8.Vx.[X] / 10uy) % 10uy in
+                              let D = chip8.Vx.[X] % 10uy in
+                              chip8.memory.[int chip8.I] <- B
+                              chip8.memory.[int chip8.I + 1] <- C
+                              chip8.memory.[int chip8.I + 2] <- D
+                              chip8.PC <- chip8.PC + 2us
+
 // FX65 - Stock les valeurs de de la mémoire à l'adresse I jusqu'à I + X dans VO jusqu'à VX
 let instruction_FX65 opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
                               for i in [0..X] do
