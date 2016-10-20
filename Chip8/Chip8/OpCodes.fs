@@ -29,6 +29,50 @@ let instruction_7XKK opcode = let X = int (opcode &&& 0x0F00us >>> 8) in //garde
                               let KK = byte (opcode &&& 0x00FFus) in    
                               chip8.Vx.[X] <- chip8.Vx.[X] + KK 
                               chip8.PC <- chip8.PC + 2us
+// 8XY0 Affecter VY à VX
+let instruction_8XY0 opcode = let X = int (opcode &&& 0x0F00us >>> 8) in //garde seulement la première valeur
+                              let Y = int (opcode &&& 0x00F0us >>> 4) in 
+                              chip8.Vx.[X] <- chip8.Vx.[Y]
+                              chip8.PC <- chip8.PC + 2us 
+
+//8XY1 Affecter resultat de VX ||| VY à VX
+let instruction_8XY1 opcode = let X = int (opcode &&& 0x0F00us >>> 8) in
+                              let Y = int (opcode &&& 0x00F0us >>> 4) in
+                              chip8.Vx.[X] <- chip8.Vx.[X] ||| chip8.Vx.[Y]
+                              chip8.PC <- chip8.PC + 2us
+
+//8XY2 Affecter resultat de VX &&& VY à VX
+let instruction_8XY2 opcode = let X = int (opcode &&& 0x0F00us >>> 8) in
+                              let Y = int (opcode &&& 0x00F0us >>> 4) in
+                              chip8.Vx.[X] <- chip8.Vx.[X] &&& chip8.Vx.[Y]
+                              chip8.PC <- chip8.PC + 2us
+
+//8XY3 Affecter VX xor VY à VX
+let instruction_8XY3 opcode = let X = int (opcode &&& 0x0F00us >>> 8) in
+                              let Y = int (opcode &&& 0x00F0us >>> 4) in
+                              chip8.Vx.[X] <- chip8.Vx.[X] ^^^ chip8.Vx.[Y] 
+                              chip8.PC <- chip8.PC + 2us
+
+//8XY4 Affecte VX + VY à VX si dépassemnt alors VX[F] = 1 sinon VX[F] = 0
+let instruction_8XY4 opcode = let X = int (opcode &&& 0x0F00us >>> 8) in
+                              let Y = int (opcode &&& 0x00F0us >>> 4) in
+                              chip8.Vx.[X] <- chip8.Vx.[X] + chip8.Vx.[Y]
+                              if (uint16 X + uint16 Y > 0xFFus) then chip8.Vx.[0xF] <- 1uy else chip8.Vx.[0xF] <- 0uy
+                              chip8.PC <- chip8.PC + 2us
+
+//8XY5 Affecter VX-VY à VX.Si VX > VY alors VX[F] = 1 sinon VX[F] = 0
+let instruction_8XY5 opcode = let X = int (opcode &&& 0x0F00us >>> 8) in
+                              let Y = int (opcode &&& 0x00F0us >>> 4) in
+                              chip8.Vx.[X] <- chip8.Vx.[X] - chip8.Vx.[Y] 
+                              if (chip8.Vx.[X] > chip8.Vx.[Y]) then chip8.Vx.[0xF] <- 1uy else chip8.Vx.[0xF] <- 0uy
+                              chip8.PC <- chip8.PC + 2us
+ 
+//8XY7 Affecter VX-VY à VX.Si VX < VY alors VX[F] = 1 sinon VX[F] = 0
+let instruction_8XY7 opcode = let X = int (opcode &&& 0x0F00us >>> 8) in
+                              let Y = int (opcode &&& 0x00F0us >>> 4) in
+                              chip8.Vx.[X] <- chip8.Vx.[X] - chip8.Vx.[Y] 
+                              if (chip8.Vx.[X] < chip8.Vx.[Y]) then chip8.Vx.[0xF] <- 1uy else chip8.Vx.[0xF] <- 0uy
+                              chip8.PC <- chip8.PC + 2us
 
 // 9XY0 - Passe à l'instruction suivante si VX != VY
 let instruction_9XY0 opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
