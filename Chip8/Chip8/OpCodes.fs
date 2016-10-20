@@ -44,3 +44,8 @@ let instruction_FX65 opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
                               for i in [0..X] do
                                   chip8.Vx.[i] <- chip8.memory.[int chip8.I + i]
                               chip8.PC <- chip8.PC + 2us
+
+//5XY0 - Passe l'instruction suivante si VX = VY
+let instruction_5XY0 opcode = let X = int((opcode &&& 0x0F00us) >>> 8) in
+                              let Y = int((opcode &&& 0x00F0us) >>> 4) in
+                              if chip8.Vx.[X] = chip8.Vx.[Y] then chip8.PC <- chip8.PC + 4us else chip8.PC <- chip8.PC + 2us
