@@ -44,3 +44,8 @@ let instruction_FX65 opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
                               for i in [0..X] do
                                   chip8.Vx.[i] <- chip8.memory.[int chip8.I + i]
                               chip8.PC <- chip8.PC + 2us
+                              
+//CXNN adds value NN to VX
+
+let instruction_CXNN opcode = let X = int (opcode &&&  0x0F00) >>> 8 and NN  = (opcode &&& 0x00FF) in 
+                              chip8.VX[X] <- chip8.VX[X] +  NN
