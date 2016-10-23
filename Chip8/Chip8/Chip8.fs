@@ -9,6 +9,12 @@ let screen = Array.create 2048 0uy
 
 let romFile = ""
 
+//On crée une pile stockant les sous-programmes (en gros les fonctions). Elle sert notamment à savoir à quel sous-programme je dois aller après en avoir terminé un . Elle a 16 niveaux maximum
+let stack = Array.create 16 0us
+
+// On crée un pointeur qui pointera le haut de la pile.
+let mutable SP = 0us
+
 //Characters 0-F (in hexadecimal) are represented by a 4x5 font.
 let fontset = [| 
     0xF0uy; 0x90uy; 0x90uy; 0x90uy; 0xF0uy; //0
