@@ -53,10 +53,12 @@ let instruction_FX33 opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in // nu
                               chip8.memory.[int chip8.I + 2] <- byte D
                               chip8.PC <- chip8.PC + 2us
 
-///FX55 charge les Vx en i -> i + 15
-let instruction_FX55 opcode X = let dec = int X in  while  dec >= 0
-                                chip8.memory[I + dec] <- chip8.Vx[dec]
-                                dec = dec - 1
+
+///FX55 charge les Vx en I -> I + 15
+let instruction_FX55 opcode X = let X = int ((opcode &&& 0x0F00us) >>> 8) in
+                                for i in [0..X] do
+                                   chip8.Vx.[I + i] <- chip8.Vx.[i]
+                                chip8.PC <- chip8.PC + 2us
 
 // FX65 - Stock les valeurs de de la mémoire à l'adresse I jusqu'à I + X dans VO jusqu'à VX
 let instruction_FX65 opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
