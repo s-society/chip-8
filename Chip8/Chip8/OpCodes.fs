@@ -39,6 +39,9 @@ let instruction_9XY0 opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
 let instruction_ANNN opcode = chip8.I <- ( opcode &&& 0x0FFFus) // garde seulement les 3 dernières valeurs pour les assigner
                               chip8.PC <- chip8.PC + 2us
 
+// BNNN - Saute jusuq'à NNN + V[0]
+let instruction_BNNN opcode = chip8.PC <- (opcode &&& 0x0FFFus)) + chip8.V[0]
+
 // FX1E - Affecte VX + I à I
 let instruction_FX1E opcode = chip8.I <- chip8.I + uint16 chip8.Vx.[int ((opcode &&& 0x0F00us) >>> 8)]
                               chip8.PC <- chip8.PC + 2us
@@ -58,6 +61,3 @@ let instruction_FX65 opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
                               for i in [0..X] do
                                   chip8.Vx.[i] <- chip8.memory.[int chip8.I + i]
                               chip8.PC <- chip8.PC + 2us
-
-// BNNN - Saute jusuq'à NNN + V[0]
-let instruction_BNNN opcode = chip8.PC <- (opcode &&& 0x0FFFus)) + chip8.V[0]
