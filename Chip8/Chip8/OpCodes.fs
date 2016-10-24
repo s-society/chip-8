@@ -40,7 +40,7 @@ let instruction_ANNN opcode = chip8.I <- ( opcode &&& 0x0FFFus) // garde seuleme
                               chip8.PC <- chip8.PC + 2us
 
 // BNNN - Saute jusuq'à NNN + V[0]
-let instruction_BNNN opcode = chip8.PC <- (opcode &&& 0x0FFFus) + chip8.V[0]
+let instruction_BNNN opcode = chip8.PC <- uint16(opcode &&& 0x0FFFus) + chip8.V[0]
 
 // FX1E - Affecte VX + I à I
 let instruction_FX1E opcode = chip8.I <- chip8.I + uint16 chip8.Vx.[int ((opcode &&& 0x0F00us) >>> 8)]
