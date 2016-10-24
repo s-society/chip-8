@@ -58,3 +58,6 @@ let instruction_FX65 opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
                               for i in [0..X] do
                                   chip8.Vx.[i] <- chip8.memory.[int chip8.I + i]
                               chip8.PC <- chip8.PC + 2us
+
+// BNNN - Saute jusuq'à NNN + V[0]
+let instruction_BNNN opcode = chip8.PC <- (int (opcode &&& 0x0FFFus)) + chip8.V[0]
