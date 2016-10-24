@@ -8,7 +8,7 @@ let mutable I = 0us
 let screen = Array.create 2048 0uy
 
 let romFile = ""
-
+let mutable SoundTimer = 0uy
 //On crée une pile stockant les sous-programmes (en gros les fonctions). Elle sert notamment à savoir à quel sous-programme je dois aller après en avoir terminé un . Elle a 16 niveaux maximum
 let stack = Array.create 16 0us
 
