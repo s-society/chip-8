@@ -57,7 +57,7 @@ let instruction_8XY3 opcode = let X = int (opcode &&& 0x0F00us >>> 8) in
 //8XY4 Affecte VX + VY à VX si dépassemnt alors VX[F] = 1 sinon VX[F] = 0
 let instruction_8XY4 opcode = let X = int (opcode &&& 0x0F00us >>> 8) in
                               let Y = int (opcode &&& 0x00F0us >>> 4) in
-                              if (uint16 chip8.Vx.[X] + uint16 chip8.Vx.[Y] > 0xFFus) then chip8.Vx.[0xF] <- 1uy else chip8.Vx.[0xF] <- 0uy
+                              if (int chip8.Vx.[X] + int chip8.Vx.[Y] > 255) then chip8.Vx.[0xF] <- 1uy else chip8.Vx.[0xF] <- 0uy
                               chip8.Vx.[X] <- chip8.Vx.[X] + chip8.Vx.[Y]
                               chip8.PC <- chip8.PC + 2us
 
