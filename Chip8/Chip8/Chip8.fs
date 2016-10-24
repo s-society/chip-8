@@ -13,7 +13,7 @@ let romFile = ""
 let stack = Array.create 16 0us
 
 // On crée un pointeur qui pointera le haut de la pile.
-let mutable SP = 0us
+let mutable SP = 0
 
 //Characters 0-F (in hexadecimal) are represented by a 4x5 font.
 let fontset = [| 
