@@ -13,6 +13,10 @@ let instruction_00EE = chip8.SP <- chip8.SP - 1
                        chip8.PC <- chip8.stack.[chip8.SP]
                        chip8.PC <- chip8.PC + 2us
 
+// 2NNN - Appelle la sous-routine à l'adresse NNN
+let instruction_2NNN opcode = chip8.stack.[chip8.SP] <- chip8.PC
+                              chip8.SP <- chip8.SP + 1
+                              chip8.PC <- opcode &&& 0x0FFFus
 
 // 3XKK - Passe à l'instruction suivante si VX = KK
 let instruction_3XKK opcode = let X = int (opcode &&& 0x0F00us >>> 8) in //garde seulement la première valeur
@@ -51,7 +55,7 @@ let instruction_ANNN opcode = chip8.I <- ( opcode &&& 0x0FFFus) // garde seuleme
                               chip8.PC <- chip8.PC + 2us
 
 // BNNN - Saute jusuq'à NNN + V[0]
-let instruction_BNNN opcode = chip8.PC <- (opcode &&& 0x0FFFus) + uint16(chip8.V[0])
+let instruction_BNNN opcode = chip8.PC <- (opcode &&& 0x0FFFus) + uint16(chip8.Vx.[0])
 
 // FX1E - Affecte VX + I à I
 let instruction_FX1E opcode = chip8.I <- chip8.I + uint16 chip8.Vx.[int ((opcode &&& 0x0F00us) >>> 8)]
