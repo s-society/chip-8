@@ -82,6 +82,9 @@ let instruction_FX18 opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
                               chip8.SoundTimer <- chip8.Vx.[X]
                               chip8.PC <- chip8.PC + 2us
 
+// EX9E - Passe l'instruction suivante si touche VX enfoncée
+let instruction_EX9E opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
+                              if chip8.keys.[int chip8.Vx.[X]] <> 0uy then chip8.PC <- chip8.PC + 4us else chip8.PC <- chip8.PC + 2us
 // FX1E - Affecte VX + I à I
 let instruction_FX1E opcode = chip8.I <- chip8.I + uint16 chip8.Vx.[int ((opcode &&& 0x0F00us) >>> 8)]
                               chip8.PC <- chip8.PC + 2us
