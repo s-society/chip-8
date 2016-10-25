@@ -38,6 +38,7 @@ let instruction_9XY0 opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
 // ANNN - Affecter NNN à I
 let instruction_ANNN opcode = chip8.I <- ( opcode &&& 0x0FFFus) // garde seulement les 3 dernières valeurs pour les assigner
                               chip8.PC <- chip8.PC + 2us
+                              
 // FX07 - VX -> DelayTimer
 let insttuction_FX07 opcode = let X = int ((opcode &&& 0x0F00us) >>>8) in
                               Vx.[X] <- chip8.DelayTimer
