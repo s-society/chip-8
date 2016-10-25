@@ -1,6 +1,8 @@
 ﻿module OpCodes
 
 // 35 opcodes
+open System
+
 
 // 00E0 - Instruction pour effacer l'écran
 let instruction_00E0 = let mutable i = 0 in while i < chip8.screen.Length do
@@ -90,3 +92,11 @@ let instruction_FX65 opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
                               for i in [0..X] do
                                   chip8.Vx.[i] <- chip8.memory.[int chip8.I + i]
                               chip8.PC <- chip8.PC + 2us
+
+//CXKK - Randomizer through xand between KK and random number
+let instruction_CXKK opcode = let KK = int (opcode &&& 0x00FFus) in
+                              let NN = (System.Random()).Next() in
+                              let X = int(opcode &&& 0x0F00us >>> 8) in
+                              chip8.Vx.[X] <- byte(KK ^^^ NN)
+                              chip8.PC<-chip8.PC + 2us
+                                
