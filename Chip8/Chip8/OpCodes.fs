@@ -42,6 +42,7 @@ let instruction_ANNN opcode = chip8.I <- ( opcode &&& 0x0FFFus) // garde seuleme
 // FX1E - Affecte VX + I à I
 let instruction_FX1E opcode = chip8.I <- chip8.I + uint16 chip8.Vx.[int ((opcode &&& 0x0F00us) >>> 8)]
                               chip8.PC <- chip8.PC + 2us
+                              
 // FX15 - Affecte VX au timer principal DT
 let instruction_FX15 opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
                               chip8.DelayTimer <- chip8.Vx.[X]
