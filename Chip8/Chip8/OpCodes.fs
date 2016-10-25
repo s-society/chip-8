@@ -70,7 +70,6 @@ let instruction_8XY5 opcode = let X = int (opcode &&& 0x0F00us >>> 8) in
 
 //8XY6 Fait un shift droit sur VX affecte le bit sorti à VX[F]
 let instruction_8XY6 opcode = let X = int (opcode &&& 0x0F00us >>> 8) in
-                              let Y = int (opcode &&& 0x00F0us >>> 4) in
                               chip8.Vx.[0xF] <- chip8.Vx.[X] &&& 0b0000001uy
                               chip8.Vx.[X] <- chip8.Vx.[X] >>> 1
                               chip8.PC <- chip8.PC + 2us
@@ -84,7 +83,6 @@ let instruction_8XY7 opcode = let X = int (opcode &&& 0x0F00us >>> 8) in
 
 //8XYE Fait un shift gauche sur VX affecte le bit sorti à VX[F] = 0
 let instruction_8XYE opcode = let X = int (opcode &&& 0x0F00us >>> 8) in
-                              let Y = int (opcode &&& 0x00F0us >>> 4) in
                               chip8.Vx.[0xF] <- (chip8.Vx.[X] &&& 0b10000000uy) >>> 7
                               chip8.Vx.[X] <- chip8.Vx.[X] <<< 1
                               chip8.PC <- chip8.PC + 2us
