@@ -86,7 +86,7 @@ let instruction_8XY7 opcode = let X = int (opcode &&& 0x0F00us >>> 8) in
 let instruction_8XYE opcode = let X = int (opcode &&& 0x0F00us >>> 8) in
                               let Y = int (opcode &&& 0x00F0us >>> 4) in
                               chip8.Vx.[0xF] <- (chip8.Vx.[X] &&& 0b10000000uy) >>> 7
-                              chip8.Vx.[X] <- chip8.Vx.[Y] <<< 1
+                              chip8.Vx.[X] <- chip8.Vx.[X] <<< 1
                               chip8.PC <- chip8.PC + 2us
 
 // 9XY0 - Passe à l'instruction suivante si VX != VY
