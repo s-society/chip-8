@@ -53,6 +53,9 @@ let instruction_ANNN opcode = chip8.I <- ( opcode &&& 0x0FFFus) // garde seuleme
 // BNNN - Saute jusuq'à NNN + V[0]
 let instruction_BNNN opcode = chip8.PC <- (opcode &&& 0x0FFFus) + uint16(chip8.V[0])
 
+// EF9E - Passe l'instruction suivante si touche VX enfoncée
+let instruction_EX9E opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
+                              if chip8.keys.[int chip8.Vx.[X]] <> 0uy then chip8.PC <- chip8.PC + 4us else chip8.PC <- chip8.PC + 2us
 // FX1E - Affecte VX + I à I
 let instruction_FX1E opcode = chip8.I <- chip8.I + uint16 chip8.Vx.[int ((opcode &&& 0x0F00us) >>> 8)]
                               chip8.PC <- chip8.PC + 2us
