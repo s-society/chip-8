@@ -53,6 +53,13 @@ let instruction_ANNN opcode = chip8.I <- ( opcode &&& 0x0FFFus) // garde seuleme
 // BNNN - Saute jusuq'à NNN + V[0]
 let instruction_BNNN opcode = chip8.PC <- (opcode &&& 0x0FFFus) + uint16(chip8.V[0])
 
+// FX0A - Wait for a KeyPress
+let instruction_FX0A opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
+                              for i in [0..chip8.keys.Length-1] do
+                                if chip8.keys.[i] = 1uy then
+                                    chip8.Vx.[X] <- chip8.keys.[i]
+                                    chip8.PC <- chip8.PC + 2us
+
 // FX1E - Affecte VX + I à I
 let instruction_FX1E opcode = chip8.I <- chip8.I + uint16 chip8.Vx.[int ((opcode &&& 0x0F00us) >>> 8)]
                               chip8.PC <- chip8.PC + 2us
