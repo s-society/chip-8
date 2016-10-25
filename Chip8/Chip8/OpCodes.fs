@@ -5,16 +5,21 @@
 // 00E0 - Instruction pour effacer l'écran
 let instruction_00E0 = let mutable i = 0 in while i < chip8.screen.Length do
                                                 chip8.screen.[i] <- 0uy
-                                                i <- i + 1 
+                                                i <- i + 1
                        chip8.PC <- chip8.PC + 2us
 
-// 00EE - Retour depuis une sous-routine 
+// 00EE - Retour depuis une sous-routine
 let instruction_00EE = chip8.SP <- chip8.SP - 1
                        chip8.PC <- chip8.stack.[chip8.SP]
                        chip8.PC <- chip8.PC + 2us
 
 // 1NNN - Saute à l'adresse NNN
-let instruction_1NNN opcode = chip8.PC <- opcode &&& 0x0FFFus 
+let instruction_1NNN opcode = chip8.PC <- opcode &&& 0x0FFFus
+
+// 2NNN - Appelle la sous-routine à l'adresse NNN
+let instruction_2NNN opcode = chip8.stack.[chip8.SP] <- chip8.PC
+                              chip8.SP <- chip8.SP + 1
+                              chip8.PC <- opcode &&& 0x0FFFus
 
 // 3XKK - Passe à l'instruction suivante si VX = KK
 let instruction_3XKK opcode = let X = int (opcode &&& 0x0F00us >>> 8) in //garde seulement la première valeur
