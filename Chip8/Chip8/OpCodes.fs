@@ -117,6 +117,14 @@ let instruction_ANNN opcode = chip8.I <- ( opcode &&& 0x0FFFus) // garde seuleme
 // BNNN - Saute jusuq'à NNN + V[0]
 let instruction_BNNN opcode = chip8.PC <- (opcode &&& 0x0FFFus) + uint16(chip8.Vx.[0])
 
+// EX9E - Passe l'instruction suivante si touche VX enfoncée
+let instruction_EX9E opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
+                              if chip8.keys.[int chip8.Vx.[X]] <> 0uy then chip8.PC <- chip8.PC + 4us else chip8.PC <- chip8.PC + 2us
+
+// EXA1 - Passe l'instruction suivante si touche VX pas enfoncée
+let instruction_EXA1 opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
+                              if chip8.keys.[int chip8.Vx.[X]] = 0uy then chip8.PC <- chip8.PC + 4us else chip8.PC <- chip8.PC + 2us
+
 // FX0A - Wait for a KeyPress
 let instruction_FX0A opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
                               for i in [0..chip8.keys.Length-1] do
@@ -139,11 +147,13 @@ let instruction_FX18 opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
                               chip8.SoundTimer <- chip8.Vx.[X]
                               chip8.PC <- chip8.PC + 2us
 
-// EX9E - Passe l'instruction suivante si touche VX enfoncée
-let instruction_EX9E opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
-                              if chip8.keys.[int chip8.Vx.[X]] <> 0uy then chip8.PC <- chip8.PC + 4us else chip8.PC <- chip8.PC + 2us
 // FX1E - Affecte VX + I à I
 let instruction_FX1E opcode = chip8.I <- chip8.I + uint16 chip8.Vx.[int ((opcode &&& 0x0F00us) >>> 8)]
+                              chip8.PC <- chip8.PC + 2us
+
+// FX29 - Affecte à I l'adresse mémoire du caractère d'index VX
+let instruction_FX29 opcode = let X = (opcode &&& 0x0F00us) >>> 8 in
+                              chip8.I <- uint16 (Vx.[int X]*5uy)
                               chip8.PC <- chip8.PC + 2us
 
 // FX33 - Stock la représentation BCD de VX aux adresses I, I + 1, I + 2
