@@ -135,8 +135,8 @@ let instruction_FX0A opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
                                     chip8.PC <- chip8.PC + 2us
 
 // FX07 - VX -> DelayTimer
-let insttuction_FX07 opcode = let X = int ((opcode &&& 0x0F00us) >>>8) in
-                              Vx.[X] <- chip8.DelayTimer
+let instruction_FX07 opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
+                              chip8.Vx.[X] <- chip8.DelayTimer
                               chip8.PC <- chip8.PC + 2us
 
 // FX15 - Affecte VX au timer principal DT
