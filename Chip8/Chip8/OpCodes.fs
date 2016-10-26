@@ -119,6 +119,23 @@ let instruction_ANNN opcode = chip8.I <- ( opcode &&& 0x0FFFus) // garde seuleme
 // BNNN - Saute jusuq'à NNN + V[0]
 let instruction_BNNN opcode = chip8.PC <- (opcode &&& 0x0FFFus) + uint16(chip8.Vx.[0])
 
+//DXYK - Dessine un sprite en X,Y de taille K
+let instruction_DXYK opcode = let X = chip8.Vx.[ int ((opcode &&& 0x0F00us) >>> 8) ]  in
+                              let Y = chip8.Vx.[ int ((opcode &&& 0x00F0us) >>> 4)] in
+                              let Height = byte (opcode &&& 0x000Fus) in
+                              for lines in [0..(int Height-1)] do
+                                  let linedata = chip8.memory.[int chip8.I + lines]
+                                  let mutable bit = 0b10000000uy
+                                  for width in [0..7] do
+                                      let pixelIndex = int X + width + (int Y + lines) * 64 in
+                                      if pixelIndex < chip8.screen.Length then
+                                        let screenPixel = chip8.screen.[pixelIndex] in
+                                          if linedata &&& bit > 0uy then do 
+                                              if screenPixel = 1uy then chip8.Vx.[0xF] <- 1uy
+                                              chip8.screen.[pixelIndex] <- screenPixel ^^^ 1uy
+                                        bit <- bit >>> 1
+                              chip8.PC <- chip8.PC + 2us
+                                  
 // EX9E - Passe l'instruction suivante si touche VX enfoncée
 let instruction_EX9E opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
                               if chip8.keys.[int chip8.Vx.[X]] <> 0uy then chip8.PC <- chip8.PC + 4us else chip8.PC <- chip8.PC + 2us
@@ -155,7 +172,7 @@ let instruction_FX1E opcode = chip8.I <- chip8.I + uint16 chip8.Vx.[int ((opcode
 
 // FX29 - Affecte à I l'adresse mémoire du caractère d'index VX
 let instruction_FX29 opcode = let X = (opcode &&& 0x0F00us) >>> 8 in
-                              chip8.I <- uint16 (Vx.[int X]*5uy)
+                              chip8.I <- uint16 (chip8.Vx.[int X]*5uy)
                               chip8.PC <- chip8.PC + 2us
 
 // FX33 - Stock la représentation BCD de VX aux adresses I, I + 1, I + 2
