@@ -1,4 +1,8 @@
 ﻿module chip8
+open System
+open System.Windows.Forms
+open System.IO
+open System.Drawing
 
 let memory = Array.create 4096 0uy
 let mutable PC = 0x200us
@@ -12,6 +16,19 @@ let romFile = ""
 let mutable DelayTimer = 0uy
 let mutable SoundTimer = 0uy
 
+type DoubleBufferForm() =
+    inherit Form()
+    do base.SetStyle(ControlStyles.AllPaintingInWmPaint ||| ControlStyles.UserPaint ||| ControlStyles.DoubleBuffer, true)
+
+let Draw (args:PaintEventArgs) =
+    let whiteBrush = new SolidBrush(Color.White)  
+    for row in [0..31] do
+        for col in [0..63] do
+            if screen.[col + (row * 64)] <> 0uy then
+                args.Graphics.FillRectangle(whiteBrush, col * 16, row * 16, 16, 16)
+    whiteBrush.Dispose()
+
+let form = new DoubleBufferForm()
 //On crée une pile stockant les sous-programmes (en gros les fonctions). Elle sert notamment à savoir à quel sous-programme je dois aller après en avoir terminé un . Elle a 16 niveaux maximum
 let stack = Array.create 16 0us
 
