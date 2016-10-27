@@ -31,9 +31,6 @@ let main argv =
     let mutable d_s_timer = DateTime.Now
     let mutable instruction_timer = DateTime.Now
     
-    for i in [0..2047] do
-      chip8.screen.[int i] <- 0uy
-    
     //Main loop function for the chip-8 emulator :
     let main_loop = 
         async { //so the program continues further as th loop still runs 
