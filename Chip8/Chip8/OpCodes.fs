@@ -1,19 +1,19 @@
 ﻿module OpCodes
+open chip8
 
 // 35 opcodes
 open System
 let random = System.Random()
 
 // 00E0 - Instruction pour effacer l'écran
-let instruction_00E0 = let mutable i = 0 in while i < chip8.screen.Length do
-                                                chip8.screen.[i] <- 0uy
-                                                i <- i + 1
-                       chip8.PC <- chip8.PC + 2us
+let instruction_00E0 () = for i in [0..2047] do
+                            chip8.screen.[int i] <- 0uy
+                          chip8.PC <- chip8.PC + 2us
 
 // 00EE - Retour depuis une sous-routine
-let instruction_00EE = chip8.SP <- chip8.SP - 1
-                       chip8.PC <- chip8.stack.[chip8.SP]
-                       chip8.PC <- chip8.PC + 2us
+let instruction_00EE () = chip8.SP <- chip8.SP - 1
+                          chip8.PC <- chip8.stack.[chip8.SP]
+                          chip8.PC <- chip8.PC + 2us
 
 // 1NNN - Saute à l'adresse NNN
 let instruction_1NNN opcode = chip8.PC <- opcode &&& 0x0FFFus
@@ -134,6 +134,7 @@ let instruction_DXYK opcode = let X = chip8.Vx.[ int ((opcode &&& 0x0F00us) >>> 
                                               if screenPixel = 1uy then chip8.Vx.[0xF] <- 1uy
                                               chip8.screen.[pixelIndex] <- screenPixel ^^^ 1uy
                                         bit <- bit >>> 1
+                              chip8.form.Invalidate()
                               chip8.PC <- chip8.PC + 2us
                                   
 // EX9E - Passe l'instruction suivante si touche VX enfoncée
