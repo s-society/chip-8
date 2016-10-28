@@ -8,6 +8,46 @@ let memory = Array.create 4096 0uy
 let mutable PC = 0x200us
 let mutable Vx = Array.create 16 0uy
 let keys = Array.create 16 0uy
+let OnKeyPress (args:KeyEventArgs) =
+
+    match args.KeyCode with
+    | Keys.D1 -> keys.[0x1] <- 1uy
+    | Keys.D2 -> keys.[0x2] <- 1uy
+    | Keys.D3 -> keys.[0x3] <- 1uy
+    | Keys.D4 -> keys.[0xC] <- 1uy
+    | Keys.Q -> keys.[0x4] <- 1uy
+    | Keys.W -> keys.[0x5] <- 1uy
+    | Keys.E -> keys.[0x6] <- 1uy
+    | Keys.R -> keys.[0xD] <- 1uy
+    | Keys.A -> keys.[0x7] <- 1uy
+    | Keys.S -> keys.[0x8] <- 1uy
+    | Keys.D -> keys.[0x9] <- 1uy
+    | Keys.F -> keys.[0xE] <- 1uy
+    | Keys.Z -> keys.[0xA] <- 1uy
+    | Keys.X -> keys.[0x0] <- 1uy
+    | Keys.C -> keys.[0xB] <- 1uy
+    | Keys.V -> keys.[0xF] <- 1uy
+    | _ -> ()
+
+let OnKeyUp (args:KeyEventArgs) =
+    match args.KeyCode with
+    | Keys.D1 -> keys.[0x1] <- 0uy
+    | Keys.D2 -> keys.[0x2] <- 0uy
+    | Keys.D3 -> keys.[0x3] <- 0uy
+    | Keys.D4 -> keys.[0xC] <- 0uy
+    | Keys.Q -> keys.[0x4] <- 0uy
+    | Keys.W -> keys.[0x5] <- 0uy
+    | Keys.E -> keys.[0x6] <- 0uy
+    | Keys.R -> keys.[0xD] <- 0uy
+    | Keys.A -> keys.[0x7] <- 0uy
+    | Keys.S -> keys.[0x8] <- 0uy
+    | Keys.D -> keys.[0x9] <- 0uy
+    | Keys.F -> keys.[0xE] <- 0uy
+    | Keys.Z -> keys.[0xA] <- 0uy
+    | Keys.X -> keys.[0x0] <- 0uy
+    | Keys.C -> keys.[0xB] <- 0uy
+    | Keys.V -> keys.[0xF] <- 0uy
+    | _ -> ()
 let mutable I = 0us
 // tableau représentant la valeur noire = 0 blanc = 1 des 2048 pixels (affichage 64*32)
 let screen = Array.create 2048 0uy

@@ -51,9 +51,9 @@ let main argv =
                 match (opcode &&& 0xF000us) with 
                 | 0x0000us -> match opcode &&& 0x00FFus with
 
-                                | 0xE0us -> OpCodes.instruction_00E0()
+                                | 0xE0us -> OpCodes.instruction_00E0 ()
 
-                                | 0xEEus -> OpCodes.instruction_00EE()
+                                | 0xEEus -> OpCodes.instruction_00EE ()                      
 
                                 | _ -> do ignore(MessageBox.Show(String.Format("Unhandled opcode 0x{0:X4}", opcode), "FATAL ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error))
                                           Environment.Exit(1)
@@ -148,13 +148,14 @@ let main argv =
     chip8.form.Load.Add(fun e -> chip8.form.BackColor <- Color.Black
                                  Async.Start(main_loop))
     chip8.form.Paint.Add(chip8.Draw)
-//    chip8.form.KeyDown.Add(OnKeyPress)
-//    chip8.form.KeyUp.Add(OnKeyUp)
+    chip8.form.KeyDown.Add(chip8.OnKeyPress)
+    chip8.form.KeyUp.Add(chip8.OnKeyUp)
     chip8.form.Text <- String.Format("{0} - Chip-F Emulator", romName)
     chip8.form.MaximizeBox <- false
     chip8.form.FormBorderStyle <- FormBorderStyle.FixedSingle
     Application.Run(chip8.form)
-                                                       
+        
+                                                
 
     0
 
