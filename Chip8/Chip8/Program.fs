@@ -140,7 +140,7 @@ let main argv =
                 | _ -> do ignore(MessageBox.Show(String.Format("Unhandled opcode 0x{0:X4}", opcode), "FATAL ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error))
                           Environment.Exit(1)
 
-                                            
+                Console.WriteLine("0x{0:X4}", opcode)                            
 
                 ()}
 
