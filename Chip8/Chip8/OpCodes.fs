@@ -1,19 +1,19 @@
 ﻿module OpCodes
+open chip8
 
 // 35 opcodes
 open System
 let random = System.Random()
 
 // 00E0 - Instruction pour effacer l'écran
-let instruction_00E0 = let mutable i = 0 in while i < chip8.screen.Length do
-                                                chip8.screen.[i] <- 0uy
-                                                i <- i + 1
-                       chip8.PC <- chip8.PC + 2us
+let instruction_00E0 () = for i in [0..2047] do
+                            chip8.screen.[int i] <- 0uy
+                          chip8.PC <- chip8.PC + 2us
 
 // 00EE - Retour depuis une sous-routine
-let instruction_00EE = chip8.SP <- chip8.SP - 1
-                       chip8.PC <- chip8.stack.[chip8.SP]
-                       chip8.PC <- chip8.PC + 2us
+let instruction_00EE () = chip8.SP <- chip8.SP - 1
+                          chip8.PC <- chip8.stack.[chip8.SP]
+                          chip8.PC <- chip8.PC + 2us
 
 // 1NNN - Saute à l'adresse NNN
 let instruction_1NNN opcode = chip8.PC <- opcode &&& 0x0FFFus
@@ -123,6 +123,7 @@ let instruction_BNNN opcode = chip8.PC <- (opcode &&& 0x0FFFus) + uint16(chip8.V
 let instruction_DXYK opcode = let X = chip8.Vx.[ int ((opcode &&& 0x0F00us) >>> 8) ]  in
                               let Y = chip8.Vx.[ int ((opcode &&& 0x00F0us) >>> 4)] in
                               let Height = byte (opcode &&& 0x000Fus) in
+                              Vx.[0xF] <- 0uy
                               for lines in [0..(int Height-1)] do
                                   let linedata = chip8.memory.[int chip8.I + lines]
                                   let mutable bit = 0b10000000uy
@@ -134,6 +135,7 @@ let instruction_DXYK opcode = let X = chip8.Vx.[ int ((opcode &&& 0x0F00us) >>> 
                                               if screenPixel = 1uy then chip8.Vx.[0xF] <- 1uy
                                               chip8.screen.[pixelIndex] <- screenPixel ^^^ 1uy
                                         bit <- bit >>> 1
+                              chip8.form.Invalidate()
                               chip8.PC <- chip8.PC + 2us
                                   
 // EX9E - Passe l'instruction suivante si touche VX enfoncée
