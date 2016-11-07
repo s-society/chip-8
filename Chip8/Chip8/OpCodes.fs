@@ -123,6 +123,7 @@ let instruction_BNNN opcode = chip8.PC <- (opcode &&& 0x0FFFus) + uint16(chip8.V
 let instruction_DXYK opcode = let X = chip8.Vx.[ int ((opcode &&& 0x0F00us) >>> 8) ]  in
                               let Y = chip8.Vx.[ int ((opcode &&& 0x00F0us) >>> 4)] in
                               let Height = byte (opcode &&& 0x000Fus) in
+                              Vx.[0xF] <- 0uy
                               for lines in [0..(int Height-1)] do
                                   let linedata = chip8.memory.[int chip8.I + lines]
                                   let mutable bit = 0b10000000uy
