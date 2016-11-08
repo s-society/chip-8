@@ -5,15 +5,15 @@ open System
 let random = System.Random()
 
 // 00E0 - Instruction pour effacer l'écran
-let instruction_00E0 = let mutable i = 0 in while i < chip8.screen.Length do
+let instruction_00E0 () = let mutable i = 0 in while i < chip8.screen.Length do
                                                 chip8.screen.[i] <- 0uy
                                                 i <- i + 1
-                       chip8.PC <- chip8.PC + 2us
+                          chip8.PC <- chip8.PC + 2us
 
 // 00EE - Retour depuis une sous-routine
-let instruction_00EE = chip8.SP <- chip8.SP - 1
-                       chip8.PC <- chip8.stack.[chip8.SP]
-                       chip8.PC <- chip8.PC + 2us
+let instruction_00EE () = chip8.SP <- chip8.SP - 1
+                          chip8.PC <- chip8.stack.[chip8.SP]
+                          chip8.PC <- chip8.PC + 2us
 
 // 1NNN - Saute à l'adresse NNN
 let instruction_1NNN opcode = chip8.PC <- opcode &&& 0x0FFFus
