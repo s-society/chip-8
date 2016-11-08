@@ -148,15 +148,15 @@ let instruction_EXA1 opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
                               if chip8.keys.[int chip8.Vx.[X]] = 0uy then chip8.PC <- chip8.PC + 4us else chip8.PC <- chip8.PC + 2us
 
 // FX0A - Wait for a KeyPress
-let instruction_FX0A opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
-                              let mutable stop = false in
-                              let mutable i = 0 in
-                              while (i < chip8.keys.Length-1 && not stop) do
-                                if chip8.keys.[i] = 1uy then
-                                    chip8.Vx.[X] <- chip8.keys.[i]
-                                    chip8.PC <- chip8.PC + 2us
-                                    stop <- true
-                                i <- i + 1
+let rec instruction_FX0Ar opcode index = let X = int ((opcode &&& 0x0F00us) >>> 8) in
+                                         if index < 16 then
+                                           if chip8.keys.[index] = 0uy then
+                                             instruction_FX0Ar opcode (index + 1)
+                                           chip8.Vx.[X] <- 1uy
+                                           chip8.PC <- chip8.PC + 2us
+                                         ()
+
+let instruction_FX0A opcode = instruction_FX0Ar opcode 0
 
 // FX07 - VX -> DelayTimer
 let instruction_FX07 opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
