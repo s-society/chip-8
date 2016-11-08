@@ -135,6 +135,8 @@ let instruction_DXYK opcode = let X = chip8.Vx.[ int ((opcode &&& 0x0F00us) >>> 
                                               if screenPixel = 1uy then chip8.Vx.[0xF] <- 1uy
                                               chip8.screen.[pixelIndex] <- screenPixel ^^^ 1uy
                                         bit <- bit >>> 1
+
+                              chip8.form.Invalidate()
                               chip8.PC <- chip8.PC + 2us
                                   
 // EX9E - Passe l'instruction suivante si touche VX enfoncée
