@@ -119,6 +119,13 @@ let instruction_ANNN opcode = chip8.I <- ( opcode &&& 0x0FFFus) // garde seuleme
 // BNNN - Saute jusuq'à NNN + V[0]
 let instruction_BNNN opcode = chip8.PC <- (opcode &&& 0x0FFFus) + uint16(chip8.Vx.[0])
 
+//CXKK - Randomizer through xand between KK and random number
+let instruction_CXKK opcode = let KK = int (opcode &&& 0x00FFus) in
+                              let NN = random.Next() in
+                              let X = int(opcode &&& 0x0F00us >>> 8) in
+                              chip8.Vx.[X] <- byte(KK ^^^ NN)
+                              chip8.PC<-chip8.PC + 2us
+
 //DXYK - Dessine un sprite en X,Y de taille K
 let instruction_DXYK opcode = let X = chip8.Vx.[ int ((opcode &&& 0x0F00us) >>> 8) ]  in
                               let Y = chip8.Vx.[ int ((opcode &&& 0x00F0us) >>> 4)] in
@@ -204,11 +211,3 @@ let instruction_FX65 opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
                               for i in [0..X] do
                                   chip8.Vx.[i] <- chip8.memory.[int chip8.I + i]
                               chip8.PC <- chip8.PC + 2us
-
-//CXKK - Randomizer through xand between KK and random number
-let instruction_CXKK opcode = let KK = int (opcode &&& 0x00FFus) in
-                              let NN = random.Next() in
-                              let X = int(opcode &&& 0x0F00us >>> 8) in
-                              chip8.Vx.[X] <- byte(KK ^^^ NN)
-                              chip8.PC<-chip8.PC + 2us
-                                
