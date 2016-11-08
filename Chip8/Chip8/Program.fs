@@ -142,6 +142,16 @@ let main argv =
 
                 ()}
                                                        
+    chip8.form.ClientSize <- new System.Drawing.Size(64 * 16, 32 * 16)
+    chip8.form.Load.Add(fun e -> chip8.form.BackColor <- Color.Black
+                                 Async.Start(main_loop))
+    chip8.form.Paint.Add(chip8.Draw)
+    //chip8.form.KeyDown.Add(chip8.OnKeyPress)
+    //chip8.form.KeyUp.Add(chip8.OnKeyUp)
+    chip8.form.Text <- String.Format("{0} - Chip-F Emulator", romName)
+    chip8.form.MaximizeBox <- false
+    chip8.form.FormBorderStyle <- FormBorderStyle.FixedSingle
+    Application.Run(chip8.form)
 
     0
 
