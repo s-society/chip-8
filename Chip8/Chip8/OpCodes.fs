@@ -161,7 +161,8 @@ let rec instruction_FX0Ar opcode index = let X = int ((opcode &&& 0x0F00us) >>> 
                                            if chip8.keys.[index] = 1uy then
                                              chip8.Vx.[X] <- 1uy
                                              chip8.PC <- chip8.PC + 2us
-                                           instruction_FX0Ar opcode (index + 1)  
+                                           else
+                                             instruction_FX0Ar opcode (index + 1)  
                                          ()
 
 let instruction_FX0A opcode = instruction_FX0Ar opcode 0

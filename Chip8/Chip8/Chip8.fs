@@ -4,10 +4,52 @@ open System.Windows.Forms
 open System.IO
 open System.Drawing
 
+// Chip 8 architecture
+
+// The Chip 8 has a memory of 4MB: 4096*8 bits
 let memory = Array.create 4096 0uy
+
+// This is the counter pointing on the current instruction in the memory (or opcode)
+// The ROM is loaded in memory starting at position 0x200, hence the initial value of PC
 let mutable PC = 0x200us
+
+// The Chip 8 has 16 registers to store data during execution
+// Each register can contain one byte of data
 let mutable Vx = Array.create 16 0uy
+
+// An additional, 2 byte long register is also created:
+let mutable I = 0us
+
+// Create a stack storing adresses of subroutines (= functions).
+// It is used to know which program to go back to once the current one is finished.
+// It can be up to 16 levels deep
+let stack = Array.create 16 0us
+
+// Pointer to the top of our stack
+let mutable SP = 0
+
+// Characters 0-F (in hexadecimal) are represented by a 4x5 font.
+let fontset = [|
+    0xF0uy; 0x90uy; 0x90uy; 0x90uy; 0xF0uy; //0
+    0x20uy; 0x60uy; 0x20uy; 0x20uy; 0x70uy; //1
+    0xF0uy; 0x10uy; 0xF0uy; 0x80uy; 0xF0uy; //2
+    0xF0uy; 0x10uy; 0xF0uy; 0x10uy; 0xF0uy; //3
+    0x90uy; 0x90uy; 0xF0uy; 0x10uy; 0x10uy; //4
+    0xF0uy; 0x80uy; 0xF0uy; 0x10uy; 0xF0uy; //5
+    0xF0uy; 0x80uy; 0xF0uy; 0x90uy; 0xF0uy; //6
+    0xF0uy; 0x10uy; 0x20uy; 0x40uy; 0x40uy; //7
+    0xF0uy; 0x90uy; 0xF0uy; 0x90uy; 0xF0uy; //8
+    0xF0uy; 0x90uy; 0xF0uy; 0x10uy; 0xF0uy; //9
+    0xF0uy; 0x90uy; 0xF0uy; 0x90uy; 0x90uy; //A
+    0xE0uy; 0x90uy; 0xE0uy; 0x90uy; 0xE0uy; //B
+    0xF0uy; 0x80uy; 0x80uy; 0x80uy; 0xF0uy; //C
+    0xE0uy; 0x90uy; 0x90uy; 0x90uy; 0xE0uy; //D
+    0xF0uy; 0x80uy; 0xF0uy; 0x80uy; 0xF0uy; //E
+    0xF0uy; 0x80uy; 0xF0uy; 0x80uy; 0x80uy |]  //F
+
+// The pressed keys are stored in a simple array
 let keys = Array.create 16 0uy
+
 let OnKeyPress (args:KeyEventArgs) =
 
     match args.KeyCode with
@@ -49,19 +91,21 @@ let OnKeyUp (args:KeyEventArgs) =
     | Keys.V -> keys.[0xF] <- 0uy
     | _ -> ()
 
-let mutable I = 0us
+
 
 // Array representing the value (black = 0; white = 1) of the 2048 pixels (64*32 display)
 let screen = Array.create 2048 0uy
 
-let romFile = ""
+// These two timers are used to synchronize the execution of instructions
 let mutable DelayTimer = 0uy
 let mutable SoundTimer = 0uy
 
+// We need to make some modifications to the form type to make our display work
 type DoubleBufferForm() =
     inherit Form()
     do base.SetStyle(ControlStyles.AllPaintingInWmPaint ||| ControlStyles.UserPaint ||| ControlStyles.DoubleBuffer, true)
 
+// This draws the screen, filling every pixel with white if it is set to 1 in our screen array
 let Draw (args:PaintEventArgs) =
     let whiteBrush = new SolidBrush(Color.White)  
     for row in [0..31] do
@@ -70,31 +114,6 @@ let Draw (args:PaintEventArgs) =
                 args.Graphics.FillRectangle(whiteBrush, col * 16, row * 16, 16, 16)
     whiteBrush.Dispose()
 
+// Windows Form used as our screen
 let form = new DoubleBufferForm()
 
-// Create a stack storing adresses of subroutines (= functions).
-// It is used to know which program to go back to once the current one is finished.
-// It can be up to 16 levels deep
-let stack = Array.create 16 0us
-
-// Pointer to the top of our stack
-let mutable SP = 0
-
-// Characters 0-F (in hexadecimal) are represented by a 4x5 font.
-let fontset = [|
-    0xF0uy; 0x90uy; 0x90uy; 0x90uy; 0xF0uy; //0
-    0x20uy; 0x60uy; 0x20uy; 0x20uy; 0x70uy; //1
-    0xF0uy; 0x10uy; 0xF0uy; 0x80uy; 0xF0uy; //2
-    0xF0uy; 0x10uy; 0xF0uy; 0x10uy; 0xF0uy; //3
-    0x90uy; 0x90uy; 0xF0uy; 0x10uy; 0x10uy; //4
-    0xF0uy; 0x80uy; 0xF0uy; 0x10uy; 0xF0uy; //5
-    0xF0uy; 0x80uy; 0xF0uy; 0x90uy; 0xF0uy; //6
-    0xF0uy; 0x10uy; 0x20uy; 0x40uy; 0x40uy; //7
-    0xF0uy; 0x90uy; 0xF0uy; 0x90uy; 0xF0uy; //8
-    0xF0uy; 0x90uy; 0xF0uy; 0x10uy; 0xF0uy; //9
-    0xF0uy; 0x90uy; 0xF0uy; 0x90uy; 0x90uy; //A
-    0xE0uy; 0x90uy; 0xE0uy; 0x90uy; 0xE0uy; //B
-    0xF0uy; 0x80uy; 0x80uy; 0x80uy; 0xF0uy; //C
-    0xE0uy; 0x90uy; 0x90uy; 0x90uy; 0xE0uy; //D
-    0xF0uy; 0x80uy; 0xF0uy; 0x80uy; 0xF0uy; //E
-    0xF0uy; 0x80uy; 0xF0uy; 0x80uy; 0x80uy |]  //F
