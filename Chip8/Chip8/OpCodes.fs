@@ -158,10 +158,10 @@ let instruction_EXA1 opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
 // FX0A - Wait for a key press
 let rec instruction_FX0Ar opcode index = let X = int ((opcode &&& 0x0F00us) >>> 8) in
                                          if index < 16 then
-                                           if chip8.keys.[index] = 0uy then
-                                             instruction_FX0Ar opcode (index + 1)
-                                           chip8.Vx.[X] <- 1uy
-                                           chip8.PC <- chip8.PC + 2us
+                                           if chip8.keys.[index] = 1uy then
+                                             chip8.Vx.[X] <- 1uy
+                                             chip8.PC <- chip8.PC + 2us
+                                           instruction_FX0Ar opcode (index + 1)  
                                          ()
 
 let instruction_FX0A opcode = instruction_FX0Ar opcode 0
