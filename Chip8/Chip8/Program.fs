@@ -143,7 +143,9 @@ let main argv =
                 Console.WriteLine("0x{0:X4}", opcode)
 
                 ()}
-                                                       
+            
+    chip8.fontset.CopyTo(chip8.memory, 0)
+                                            
     chip8.form.ClientSize <- new System.Drawing.Size(64 * 16, 32 * 16)
     chip8.form.Load.Add(fun e -> chip8.form.BackColor <- Color.Black
                                  Async.Start(main_loop))
