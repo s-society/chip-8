@@ -1,13 +1,15 @@
-﻿// Learn more about F# at http://fsharp.org
-// See the 'F# Tutorial' project for more help.
-open System
+﻿open System
 open System.Windows.Forms
 open System.IO
 open System.Drawing
 
 [<EntryPoint>][<STAThread>]
 let main argv = 
+
+    // Filename for the ROM
     let mutable romName = String.Empty
+
+    // File picker dialog
     let openBinDialog = new OpenFileDialog()
     openBinDialog.Title <- "Open Chip-8 ROM File"
     openBinDialog.Filter <- "Chip-8 ROM Files|*.c8|All files|*.*"
@@ -18,20 +20,20 @@ let main argv =
                                     Environment.Exit(1)
                                 else
                                     romName <- openBinDialog.FileName
-                                    rom.CopyTo(chip8.memory, int chip8.PC)
+                                    rom.CopyTo(chip8.memory, int chip8.PC) // ROM is copied on memory at 0x200
         |_ -> Environment.Exit(1)
 
 
-    //current opcode
+    // Current opcode
     let mutable opcode = 0us
 
     let mutable d_s_timer = DateTime.Now
     let mutable instruction_timer = DateTime.Now
            
     
-    //Main loop function for the chip-8 emulator :
+    // Main loop function for the chip-8 emulator :
     let main_loop = 
-        async { //so the program continues further as th loop still runs 
+        async { // So the program continues further as the loop still runs 
         while true do  
             if ((DateTime.Now - d_s_timer).Milliseconds >= 1000/60) then do
                 d_s_timer <- DateTime.Now
@@ -146,8 +148,11 @@ let main argv =
     chip8.form.Load.Add(fun e -> chip8.form.BackColor <- Color.Black
                                  Async.Start(main_loop))
     chip8.form.Paint.Add(chip8.Draw)
+
+    // Handle keys
     chip8.form.KeyDown.Add(chip8.OnKeyPress)
     chip8.form.KeyUp.Add(chip8.OnKeyUp)
+
     chip8.form.Text <- String.Format("{0} - Chip-F Emulator", romName)
     chip8.form.MaximizeBox <- false
     chip8.form.FormBorderStyle <- FormBorderStyle.FixedSingle
