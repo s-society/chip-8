@@ -20,16 +20,16 @@ let main argv =
         |_ -> Environment.Exit(1)
 
 
-    //current opcode
+    // Current opcode
     let mutable opcode = 0us
 
     let mutable d_s_timer = DateTime.Now
     let mutable instruction_timer = DateTime.Now
            
     
-    //Main loop function for the chip-8 emulator :
+    // Main loop function for the chip-8 emulator :
     let main_loop = 
-        async { //so the program continues further as th loop still runs 
+        async { // So the program continues further as the loop still runs 
         while true do  
             if ((DateTime.Now - d_s_timer).Milliseconds >= 1000/60) then do
                 d_s_timer <- DateTime.Now
