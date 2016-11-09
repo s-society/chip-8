@@ -50,7 +50,8 @@ let OnKeyUp (args:KeyEventArgs) =
     | _ -> ()
 
 let mutable I = 0us
-// tableau représentant la valeur noire = 0 blanc = 1 des 2048 pixels (affichage 64*32)
+
+// Array representing the value (black = 0; white = 1) of the 2048 pixels (64*32 display)
 let screen = Array.create 2048 0uy
 
 let romFile = ""
@@ -70,13 +71,16 @@ let Draw (args:PaintEventArgs) =
     whiteBrush.Dispose()
 
 let form = new DoubleBufferForm()
-//On crée une pile stockant les sous-programmes (en gros les fonctions). Elle sert notamment à savoir à quel sous-programme je dois aller après en avoir terminé un . Elle a 16 niveaux maximum
+
+// Create a stack storing adresses of subroutines (= functions).
+// It is used to know which program to go back to once the current one is finished.
+// It can be up to 16 levels deep
 let stack = Array.create 16 0us
 
-// On crée un pointeur qui pointera le haut de la pile.
+// Pointer to the top of our stack
 let mutable SP = 0
 
-//Characters 0-F (in hexadecimal) are represented by a 4x5 font.
+// Characters 0-F (in hexadecimal) are represented by a 4x5 font.
 let fontset = [|
     0xF0uy; 0x90uy; 0x90uy; 0x90uy; 0xF0uy; //0
     0x20uy; 0x60uy; 0x20uy; 0x20uy; 0x70uy; //1
