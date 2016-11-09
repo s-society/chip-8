@@ -1,8 +1,9 @@
 ﻿module OpCodes
 
-// 35 opcodes
-open System
+// Needed for the randomizing opcode CXKK
 let random = System.Random()
+
+// 34 opcodes needed for the execution of ROMs
 
 // 00E0 - Instruction to clear the screen
 let instruction_00E0 () = let mutable i = 0 in while i < chip8.screen.Length do
