@@ -124,7 +124,7 @@ let instruction_BNNN opcode = chip8.PC <- (opcode &&& 0x0FFFus) + uint16(chip8.V
 let instruction_CXKK opcode = let KK = int (opcode &&& 0x00FFus) in
                               let NN = random.Next() in
                               let X = int(opcode &&& 0x0F00us >>> 8) in
-                              chip8.Vx.[X] <- byte(KK ^^^ NN)
+                              chip8.Vx.[X] <- byte(KK &&& NN)
                               chip8.PC<-chip8.PC + 2us
 
 //DXYK - Draw a sprite at coordinates X,Y of size K
