@@ -1,6 +1,8 @@
 # chip-8
 A chip-8 emulator
 
+More information [here](http://sharpboy.xyz/projects).
+
 ## Screenshots
 
 ![BLINKY](https://github.com/s-society/sharpboy/raw/master/doc/report/first/chip8cap1.PNG)
