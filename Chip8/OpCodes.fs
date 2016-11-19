@@ -25,12 +25,12 @@ let instruction_2NNN opcode = chip8.stack.[chip8.SP] <- chip8.PC
                               chip8.PC <- opcode &&& 0x0FFFus
 
 // 3XKK - Skip next instruction if VX = KK
-let instruction_3XKK opcode = let X = int (opcode &&& 0x0F00us >>> 8) in //garde seulement la première valeur
+let instruction_3XKK opcode = let X = int (opcode &&& 0x0F00us >>> 8) in
                               let KK = byte (opcode &&& 0x00FFus) in
                               if chip8.Vx.[X] = KK then chip8.PC <- chip8.PC + 4us else chip8.PC <- chip8.PC + 2us
 
 // 4XKK - Skip next instruction if VX != KK
-let instruction_4XKK opcode = let X = int (opcode &&& 0x0F00us >>> 8) in //garde seulement la première valeur
+let instruction_4XKK opcode = let X = int (opcode &&& 0x0F00us >>> 8) in
                               let KK = byte (opcode &&& 0x00FFus) in
                               if chip8.Vx.[X] <> KK then chip8.PC <- chip8.PC + 4us else chip8.PC <- chip8.PC + 2us
 
@@ -40,19 +40,19 @@ let instruction_5XY0 opcode = let X = int((opcode &&& 0x0F00us) >>> 8) in
                               if chip8.Vx.[X] = chip8.Vx.[Y] then chip8.PC <- chip8.PC + 4us else chip8.PC <- chip8.PC + 2us
 
 // 6XKK - Store KK in VX
-let instruction_6XKK opcode = let X = int (opcode &&& 0x0F00us >>> 8) in //garde seulement la première valeur
+let instruction_6XKK opcode = let X = int (opcode &&& 0x0F00us >>> 8) in
                               let KK = byte (opcode &&& 0x00FFus) in
                               chip8.Vx.[X] <- KK
                               chip8.PC <- chip8.PC + 2us
 
 // 7XKK - Add KK to VX
-let instruction_7XKK opcode = let X = int (opcode &&& 0x0F00us >>> 8) in //garde seulement la première valeur
+let instruction_7XKK opcode = let X = int (opcode &&& 0x0F00us >>> 8) in
                               let KK = byte (opcode &&& 0x00FFus) in
                               chip8.Vx.[X] <- chip8.Vx.[X] + KK
                               chip8.PC <- chip8.PC + 2us
 
 // 8XY0 - Store VY in VX
-let instruction_8XY0 opcode = let X = int (opcode &&& 0x0F00us >>> 8) in // garde seulement la première valeur
+let instruction_8XY0 opcode = let X = int (opcode &&& 0x0F00us >>> 8) in
                               let Y = int (opcode &&& 0x00F0us >>> 4) in
                               chip8.Vx.[X] <- chip8.Vx.[Y]
                               chip8.PC <- chip8.PC + 2us
@@ -114,7 +114,7 @@ let instruction_9XY0 opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
                               if chip8.Vx.[X] <> chip8.Vx.[Y] then chip8.PC <- chip8.PC + 4us else chip8.PC <- chip8.PC + 2us
 
 // ANNN - Store NNN in I
-let instruction_ANNN opcode = chip8.I <- ( opcode &&& 0x0FFFus) // garde seulement les 3 dernières valeurs pour les assigner
+let instruction_ANNN opcode = chip8.I <- ( opcode &&& 0x0FFFus)
                               chip8.PC <- chip8.PC + 2us
 
 // BNNN - Jump to NNN + V0
