@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2003
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Chip8", "Chip8\Chip8.fsproj", "{9B427CDB-9CC1-4111-995C-5F5814B281D0}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Chip8", "Chip8\Chip8.fsproj", "{FD023C4D-A3BB-400B-AE6C-B5C2BF2305FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,12 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9B427CDB-9CC1-4111-995C-5F5814B281D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9B427CDB-9CC1-4111-995C-5F5814B281D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9B427CDB-9CC1-4111-995C-5F5814B281D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9B427CDB-9CC1-4111-995C-5F5814B281D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD023C4D-A3BB-400B-AE6C-B5C2BF2305FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD023C4D-A3BB-400B-AE6C-B5C2BF2305FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD023C4D-A3BB-400B-AE6C-B5C2BF2305FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD023C4D-A3BB-400B-AE6C-B5C2BF2305FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0A5CBC2B-C280-4BE9-A9FA-9CDB81D46F82}
 	EndGlobalSection
 EndGlobal
