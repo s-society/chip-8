@@ -51,7 +51,6 @@ let fontset = [|
 let keys = Array.create 16 0uy
 
 let OnKeyPress (args:KeyEventArgs) =
-
     match args.KeyCode with
     | Keys.D1 -> keys.[0x1] <- 1uy
     | Keys.D2 -> keys.[0x2] <- 1uy
@@ -116,4 +115,3 @@ let Draw (args:PaintEventArgs) =
 
 // Windows Form used as our screen
 let form = new DoubleBufferForm()
-
