@@ -106,7 +106,7 @@ type DoubleBufferForm() =
 
 // This draws the screen, filling every pixel with white if it is set to 1 in our screen array
 let Draw (args:PaintEventArgs) =
-    let whiteBrush = new SolidBrush(Color.White)  
+    let whiteBrush = new SolidBrush(Color.White)
     for row in [0..31] do
         for col in [0..63] do
             if screen.[col + (row * 64)] <> 0uy then
@@ -115,3 +115,5 @@ let Draw (args:PaintEventArgs) =
 
 // Windows Form used as our screen
 let form = new DoubleBufferForm()
+let Menu = new MenuStrip()
+let File = new ToolStripMenuItem("File")

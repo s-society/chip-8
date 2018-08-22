@@ -139,14 +139,14 @@ let instruction_DXYK opcode = let X = chip8.Vx.[ int ((opcode &&& 0x0F00us) >>> 
                                       let pixelIndex = int X + width + (int Y + lines) * 64 in
                                       if pixelIndex < chip8.screen.Length then
                                         let screenPixel = chip8.screen.[pixelIndex] in
-                                          if linedata &&& bit > 0uy then do 
+                                          if linedata &&& bit > 0uy then do
                                               if screenPixel = 1uy then chip8.Vx.[0xF] <- 1uy
                                               chip8.screen.[pixelIndex] <- screenPixel ^^^ 1uy
                                         bit <- bit >>> 1
 
                               chip8.form.Invalidate()
                               chip8.PC <- chip8.PC + 2us
-                                  
+
 // EX9E - Skip next instruction if VX key is pressed
 let instruction_EX9E opcode = let X = int ((opcode &&& 0x0F00us) >>> 8) in
                               if chip8.keys.[int chip8.Vx.[X]] <> 0uy then chip8.PC <- chip8.PC + 4us else chip8.PC <- chip8.PC + 2us
@@ -162,7 +162,7 @@ let rec instruction_FX0Ar opcode index = let X = int ((opcode &&& 0x0F00us) >>> 
                                              chip8.Vx.[X] <- 1uy
                                              chip8.PC <- chip8.PC + 2us
                                            else
-                                             instruction_FX0Ar opcode (index + 1)  
+                                             instruction_FX0Ar opcode (index + 1)
                                          ()
 
 let instruction_FX0A opcode = instruction_FX0Ar opcode 0
